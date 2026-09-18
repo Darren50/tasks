@@ -4,22 +4,25 @@ import se.edu.streamdemo.data.Datamanager;
 import se.edu.streamdemo.task.Deadline;
 import se.edu.streamdemo.task.Task;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Welcome to Task manager (using streams)");
-        Datamanager dataManager = new Datamanager("./data/data.txt");
+        Datamanager dataManager = new Datamanager("./data/data.txt"); //Relative path
         ArrayList<Task> tasksData = dataManager.loadData();
 
         System.out.println("Printing all data ...");
         printAllData(tasksData);
+        printAllDataUsingStreams(tasksData);
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
+        System.out.println("Total number of deadlines: (using streams) " + countDeadlines(tasksData));
 
     }
 
@@ -33,7 +36,17 @@ public class Main {
         return count;
     }
 
+    private static int countDeadlinesUsingStreams(ArrayList<Task> tasks){
+        int count = (int) tasks.stream()
+                .filter(t -> t instanceof Deadline)
+                .count();
+
+        return count;
+
+    }
+
     public static void printAllData(ArrayList<Task> tasksData) {
+        System.out.println("Using iteration...");
         for (Task t : tasksData) {
             System.out.println(t);
         }
